@@ -1,0 +1,47 @@
+specVersion: 0.0.1
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: Tradescrow
+    network: mainnet
+    source:
+      address: "0x32868Ed986595e9Cb8727cb2dFB923A612a88E2E"
+      abi: Tradescrow
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.2
+      language: wasm/assemblyscript
+      entities:
+        - AppFeeChanged
+        - OwnershipTransferred
+        - Paused
+        - SwapCancelled
+        - SwapClosed
+        - SwapExecuted
+        - SwapInitiated
+        - SwapProposed
+        - Unpaused
+      abis:
+        - name: Tradescrow
+          file: ./abis/Tradescrow.json
+      eventHandlers:
+        - event: AppFeeChanged(uint256)
+          handler: handleAppFeeChanged
+        - event: OwnershipTransferred(indexed address,indexed address)
+          handler: handleOwnershipTransferred
+        - event: Paused(address)
+          handler: handlePaused
+        - event: SwapCancelled(indexed address,indexed uint256)
+          handler: handleSwapCancelled
+        - event: SwapClosed(indexed uint256)
+          handler: handleSwapClosed
+        - event: SwapExecuted(indexed address,indexed address,indexed uint256)
+          handler: handleSwapExecuted
+        - event: SwapInitiated(indexed address,indexed address,indexed uint256,(address,uint256,(address,uint256,uint256)[],(address,uint256)[]))
+          handler: handleSwapInitiated
+        - event: SwapProposed(indexed address,indexed address,indexed uint256,(address,uint256,(address,uint256,uint256)[],(address,uint256)[]))
+          handler: handleSwapProposed
+        - event: Unpaused(address)
+          handler: handleUnpaused
+      file: ./src/mapping.ts

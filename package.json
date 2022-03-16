@@ -1,0 +1,16 @@
+{
+  "name": "thegraph",
+  "license": "UNLICENSED",
+  "scripts": {
+    "codegen": "graph codegen",
+    "build": "graph build",
+    "deploy": "graph deploy --node https://api.studio.thegraph.com/deploy/ tradescrow/thegraph",
+    "create-local": "graph create --node http://localhost:8020/ tradescrow/thegraph",
+    "remove-local": "graph remove --node http://localhost:8020/ tradescrow/thegraph",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 tradescrow/thegraph"
+  },
+  "dependencies": {
+    "@graphprotocol/graph-cli": "0.21.2",
+    "@graphprotocol/graph-ts": "0.20.0"
+  }
+}
