@@ -1,4 +1,3 @@
-import { BigInt } from "@graphprotocol/graph-ts"
 import {
   Tradescrow,
   AppFeeChanged,
@@ -11,67 +10,110 @@ import {
   SwapProposed,
   Unpaused
 } from "../generated/Tradescrow/Tradescrow"
-import { ExampleEntity } from "../generated/schema"
+import { Coin, Nft, Offer, Swap, App } from "../generated/schema"
 
 export function handleAppFeeChanged(event: AppFeeChanged): void {
-  // Entities can be loaded from the store using a string ID; this ID
-  // needs to be unique across all entities of the same type
-  let entity = ExampleEntity.load(event.transaction.from.toHex())
-
-  // Entities only exist after they have been saved to the store;
-  // `null` checks allow to create entities on demand
-  if (entity == null) {
-    entity = new ExampleEntity(event.transaction.from.toHex())
-
-    // Entity fields can be set using simple assignments
-    entity.count = BigInt.fromI32(0)
-  }
-
-  // BigInt and BigDecimal math are supported
-  entity.count = entity.count + BigInt.fromI32(1)
-
-  // Entity fields can be set based on event parameters
+  let entity = new App(event.address.toHex())
   entity.fee = event.params.fee
-
-  // Entities can be written to the store with `.save()`
+  entity.owner = event.transaction.from.toHex()
+  entity.paused = false
   entity.save()
-
-  // Note: If a handler doesn't require existing field values, it is faster
-  // _not_ to load the entity from the store. Instead, create it fresh with
-  // `new Entity(...)`, set the fields that should be updated and save the
-  // entity back to the store. Fields that were not set or unset remain
-  // unchanged, allowing for partial updates to be applied.
-
-  // It is also possible to access smart contracts from mappings. For
-  // example, the contract that has emitted the event can be connected to
-  // with:
-  //
-  // let contract = Contract.bind(event.address)
-  //
-  // The following functions can then be called on this contract to access
-  // state variables and other data:
-  //
-  // - contract.fee(...)
-  // - contract.onERC1155BatchReceived(...)
-  // - contract.onERC1155Received(...)
-  // - contract.onERC721Received(...)
-  // - contract.owner(...)
-  // - contract.paused(...)
-  // - contract.supportsInterface(...)
 }
 
-export function handleOwnershipTransferred(event: OwnershipTransferred): void {}
+export function handleOwnershipTransferred(event: OwnershipTransferred): void {
+  let entity = new App(event.address.toHex())
+  entity.owner = event.params.newOwner.toHex()
+  entity.save()
+}
 
-export function handlePaused(event: Paused): void {}
+export function handlePaused(event: Paused): void {
+  let entity = new App(event.address.toHex())
+  entity.paused = true
+  entity.save()
+}
 
-export function handleSwapCancelled(event: SwapCancelled): void {}
+export function handleSwapCancelled(event: SwapCancelled): void {
+  let entity = new Swap(event.params.swapId.toString())
+  entity.open = false
+  entity.cancelling = true
+  entity.save()
+}
 
-export function handleSwapClosed(event: SwapClosed): void {}
+export function handleSwapClosed(event: SwapClosed): void {
+  let entity = new Swap(event.params.swapId.toString())
+  entity.open = false
+  entity.cancelling = false
+  entity.save()
+}
 
-export function handleSwapExecuted(event: SwapExecuted): void {}
+export function handleSwapExecuted(event: SwapExecuted): void {
+  let entity = new Swap(event.params.swapId.toString())
+  entity.executed = true
+  entity.save()
+}
 
-export function handleSwapInitiated(event: SwapInitiated): void {}
+export function handleSwapInitiated(event: SwapInitiated): void {
+  let app = App.load(event.address.toHex())
+  let entity = new Swap(event.params.swapId.toString())
+  let target = new Offer(`${entity.id}-${event.params.to.toHex()}`)
+  target.fee = app.fee
+  target.address = event.params.to.toHex()
+  target.native = event.params.offer.native
+  target.coins = event.params.offer.coins.map(coin => {
+    let c = new Coin(`${target.id}-${coin.addr.toHex()}`)
+    c.address = coin.addr.toHex()
+    c.amount = coin.amount
+    c.save()
+    return c
+  })
+  target.nfts = event.params.offer.nfts.map(nft => {
+    let n = new Nft(`${target.id}=${nft.addr.toHex()}=${nft.id.toString()}`)
+    n.address = nft.addr.toHex()
+    n.amount = nft.amount
+    n._id = nft.id
+    n.save()
+    return n
+  })
+  target.save()
+  entity.target = target
+  entity.save()
+}
 
-export function handleSwapProposed(event: SwapProposed): void {}
+export function handleSwapProposed(event: SwapProposed): void {
+  let app = App.load(event.address.toHex())
+  let entity = new Swap(event.params.swapId.toString())
+    entity.open = true
+  entity.executed = false
+  let initiator = new Offer(`${entity.id}-${event.params.from.toHex()}`)
+  initiator.fee = app.fee
+  initiator.address = event.params.offer.addr.toHex()
+  initiator.native = event.params.offer.native
+  initiator.coins = event.params.offer.coins.map(coin => {
+    let c = new Coin(`${initiator.id}-${coin.addr.toHex()}`)
+    c.address = coin.addr.toHex()
+    c.amount = coin.amount
+    c.save()
+    return c
+  })
+  initiator.nfts = event.params.offer.nfts.map(nft => {
+    let n = new Nft(`${initiator.id}=${nft.addr.toHex()}=${nft.id.toString()}`)
+    n.address = nft.addr.toHex()
+    n.amount = nft.amount
+    n._id = nft.id
+    n.save()
+    return n
+  })
+  initiator.save()
+  entity.initiator = initiator
+  let target = new Offer(`${entity.id}-${event.params.to.toHex()}`)
+  target.address = event.params.to.toHex()
+  target.save()
+  entity.target = target
+  entity.save()
+}
 
-export function handleUnpaused(event: Unpaused): void {}
+export function handleUnpaused(event: Unpaused): void {
+  let entity = new App(event.address.toHex())
+  entity.paused = false
+  entity.save()
+}

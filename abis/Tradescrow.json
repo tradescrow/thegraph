@@ -1,13 +1,6 @@
 [
   {
-    "inputs": [
-      { "internalType": "uint256", "name": "initialAppFee", "type": "uint256" },
-      {
-        "internalType": "address payable",
-        "name": "contractOwnerAddress",
-        "type": "address"
-      }
-    ],
+    "inputs": [],
     "stateMutability": "nonpayable",
     "type": "constructor"
   },
@@ -62,7 +55,7 @@
       {
         "indexed": true,
         "internalType": "address",
-        "name": "cancelledBy",
+        "name": "from",
         "type": "address"
       },
       {
@@ -133,43 +126,6 @@
         "internalType": "uint256",
         "name": "swapId",
         "type": "uint256"
-      },
-      {
-        "components": [
-          {
-            "internalType": "address payable",
-            "name": "addr",
-            "type": "address"
-          },
-          { "internalType": "uint256", "name": "native", "type": "uint256" },
-          {
-            "components": [
-              { "internalType": "address", "name": "addr", "type": "address" },
-              {
-                "internalType": "uint256",
-                "name": "amount",
-                "type": "uint256"
-              },
-              { "internalType": "uint256", "name": "id", "type": "uint256" }
-            ],
-            "internalType": "struct Tradescrow.Nft[]",
-            "name": "nfts",
-            "type": "tuple[]"
-          },
-          {
-            "components": [
-              { "internalType": "address", "name": "addr", "type": "address" },
-              { "internalType": "uint256", "name": "amount", "type": "uint256" }
-            ],
-            "internalType": "struct Tradescrow.Coin[]",
-            "name": "coins",
-            "type": "tuple[]"
-          }
-        ],
-        "indexed": false,
-        "internalType": "struct Tradescrow.Offer",
-        "name": "offer",
-        "type": "tuple"
       }
     ],
     "name": "SwapInitiated",
@@ -195,43 +151,6 @@
         "internalType": "uint256",
         "name": "swapId",
         "type": "uint256"
-      },
-      {
-        "components": [
-          {
-            "internalType": "address payable",
-            "name": "addr",
-            "type": "address"
-          },
-          { "internalType": "uint256", "name": "native", "type": "uint256" },
-          {
-            "components": [
-              { "internalType": "address", "name": "addr", "type": "address" },
-              {
-                "internalType": "uint256",
-                "name": "amount",
-                "type": "uint256"
-              },
-              { "internalType": "uint256", "name": "id", "type": "uint256" }
-            ],
-            "internalType": "struct Tradescrow.Nft[]",
-            "name": "nfts",
-            "type": "tuple[]"
-          },
-          {
-            "components": [
-              { "internalType": "address", "name": "addr", "type": "address" },
-              { "internalType": "uint256", "name": "amount", "type": "uint256" }
-            ],
-            "internalType": "struct Tradescrow.Coin[]",
-            "name": "coins",
-            "type": "tuple[]"
-          }
-        ],
-        "indexed": false,
-        "internalType": "struct Tradescrow.Offer",
-        "name": "offer",
-        "type": "tuple"
       }
     ],
     "name": "SwapProposed",
@@ -252,7 +171,11 @@
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "swapId", "type": "uint256" }
+      {
+        "internalType": "uint256",
+        "name": "swapId",
+        "type": "uint256"
+      }
     ],
     "name": "acceptSwap",
     "outputs": [],
@@ -261,7 +184,11 @@
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "swapId", "type": "uint256" }
+      {
+        "internalType": "uint256",
+        "name": "swapId",
+        "type": "uint256"
+      }
     ],
     "name": "cancelSwap",
     "outputs": [],
@@ -271,13 +198,77 @@
   {
     "inputs": [],
     "name": "fee",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "swapId", "type": "uint256" },
+      {
+        "internalType": "uint256",
+        "name": "swapId",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "participant",
+        "type": "uint256"
+      }
+    ],
+    "name": "getOfferBySwapId",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "addr",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "native",
+        "type": "uint256"
+      },
+      {
+        "internalType": "address[]",
+        "name": "coinAddresses",
+        "type": "address[]"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "coinAmounts",
+        "type": "uint256[]"
+      },
+      {
+        "internalType": "address[]",
+        "name": "nftAddresses",
+        "type": "address[]"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "nftAmounts",
+        "type": "uint256[]"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "nftIds",
+        "type": "uint256[]"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "swapId",
+        "type": "uint256"
+      },
       {
         "components": [
           {
@@ -285,16 +276,28 @@
             "name": "addr",
             "type": "address"
           },
-          { "internalType": "uint256", "name": "native", "type": "uint256" },
+          {
+            "internalType": "uint256",
+            "name": "native",
+            "type": "uint256"
+          },
           {
             "components": [
-              { "internalType": "address", "name": "addr", "type": "address" },
+              {
+                "internalType": "address",
+                "name": "addr",
+                "type": "address"
+              },
               {
                 "internalType": "uint256",
                 "name": "amount",
                 "type": "uint256"
               },
-              { "internalType": "uint256", "name": "id", "type": "uint256" }
+              {
+                "internalType": "uint256",
+                "name": "id",
+                "type": "uint256"
+              }
             ],
             "internalType": "struct Tradescrow.Nft[]",
             "name": "nfts",
@@ -302,8 +305,16 @@
           },
           {
             "components": [
-              { "internalType": "address", "name": "addr", "type": "address" },
-              { "internalType": "uint256", "name": "amount", "type": "uint256" }
+              {
+                "internalType": "address",
+                "name": "addr",
+                "type": "address"
+              },
+              {
+                "internalType": "uint256",
+                "name": "amount",
+                "type": "uint256"
+              }
             ],
             "internalType": "struct Tradescrow.Coin[]",
             "name": "coins",
@@ -322,46 +333,126 @@
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "", "type": "address" },
-      { "internalType": "address", "name": "", "type": "address" },
-      { "internalType": "uint256[]", "name": "", "type": "uint256[]" },
-      { "internalType": "uint256[]", "name": "", "type": "uint256[]" },
-      { "internalType": "bytes", "name": "", "type": "bytes" }
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "",
+        "type": "uint256[]"
+      },
+      {
+        "internalType": "uint256[]",
+        "name": "",
+        "type": "uint256[]"
+      },
+      {
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
+      }
     ],
     "name": "onERC1155BatchReceived",
-    "outputs": [{ "internalType": "bytes4", "name": "", "type": "bytes4" }],
+    "outputs": [
+      {
+        "internalType": "bytes4",
+        "name": "",
+        "type": "bytes4"
+      }
+    ],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "", "type": "address" },
-      { "internalType": "address", "name": "", "type": "address" },
-      { "internalType": "uint256", "name": "", "type": "uint256" },
-      { "internalType": "uint256", "name": "", "type": "uint256" },
-      { "internalType": "bytes", "name": "", "type": "bytes" }
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
+      }
     ],
     "name": "onERC1155Received",
-    "outputs": [{ "internalType": "bytes4", "name": "", "type": "bytes4" }],
+    "outputs": [
+      {
+        "internalType": "bytes4",
+        "name": "",
+        "type": "bytes4"
+      }
+    ],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "", "type": "address" },
-      { "internalType": "address", "name": "", "type": "address" },
-      { "internalType": "uint256", "name": "", "type": "uint256" },
-      { "internalType": "bytes", "name": "", "type": "bytes" }
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "internalType": "bytes",
+        "name": "",
+        "type": "bytes"
+      }
     ],
     "name": "onERC721Received",
-    "outputs": [{ "internalType": "bytes4", "name": "", "type": "bytes4" }],
+    "outputs": [
+      {
+        "internalType": "bytes4",
+        "name": "",
+        "type": "bytes4"
+      }
+    ],
     "stateMutability": "nonpayable",
     "type": "function"
   },
   {
     "inputs": [],
     "name": "owner",
-    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
@@ -375,7 +466,13 @@
   {
     "inputs": [],
     "name": "paused",
-    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
@@ -393,16 +490,28 @@
             "name": "addr",
             "type": "address"
           },
-          { "internalType": "uint256", "name": "native", "type": "uint256" },
+          {
+            "internalType": "uint256",
+            "name": "native",
+            "type": "uint256"
+          },
           {
             "components": [
-              { "internalType": "address", "name": "addr", "type": "address" },
+              {
+                "internalType": "address",
+                "name": "addr",
+                "type": "address"
+              },
               {
                 "internalType": "uint256",
                 "name": "amount",
                 "type": "uint256"
               },
-              { "internalType": "uint256", "name": "id", "type": "uint256" }
+              {
+                "internalType": "uint256",
+                "name": "id",
+                "type": "uint256"
+              }
             ],
             "internalType": "struct Tradescrow.Nft[]",
             "name": "nfts",
@@ -410,8 +519,16 @@
           },
           {
             "components": [
-              { "internalType": "address", "name": "addr", "type": "address" },
-              { "internalType": "uint256", "name": "amount", "type": "uint256" }
+              {
+                "internalType": "address",
+                "name": "addr",
+                "type": "address"
+              },
+              {
+                "internalType": "uint256",
+                "name": "amount",
+                "type": "uint256"
+              }
             ],
             "internalType": "struct Tradescrow.Coin[]",
             "name": "coins",
@@ -424,7 +541,13 @@
       }
     ],
     "name": "proposeSwap",
-    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
     "stateMutability": "payable",
     "type": "function"
   },
@@ -437,16 +560,30 @@
   },
   {
     "inputs": [
-      { "internalType": "bytes4", "name": "interfaceId", "type": "bytes4" }
+      {
+        "internalType": "bytes4",
+        "name": "interfaceId",
+        "type": "bytes4"
+      }
     ],
     "name": "supportsInterface",
-    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "newOwner", "type": "address" }
+      {
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
     ],
     "name": "transferOwnership",
     "outputs": [],
@@ -462,7 +599,11 @@
   },
   {
     "inputs": [
-      { "internalType": "uint256", "name": "newFee", "type": "uint256" }
+      {
+        "internalType": "uint256",
+        "name": "newFee",
+        "type": "uint256"
+      }
     ],
     "name": "updateAppFee",
     "outputs": [],

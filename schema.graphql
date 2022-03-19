@@ -1,5 +1,38 @@
-type ExampleEntity @entity {
+type App @entity {
   id: ID!
-  count: BigInt!
-  fee: BigInt! # uint256
+  fee: BigInt!
+  owner: String!
+  paused: Boolean!
+}
+
+type Coin @entity {
+  id: ID!
+  address: String!
+  amount: BigInt!
+}
+
+type Nft @entity {
+  id: ID!
+  _id: BigInt!
+  address: String!
+  amount: BigInt
+}
+
+type Offer @entity {
+  id: ID!
+  address: String!
+  native: BigInt
+  nfts: [Nft!]
+  coins: [Coin!]
+  fee: BigInt
+}
+
+type Swap @entity {
+  id: ID!
+  initiator: Offer!
+  target: Offer!
+  proposed: Timestamp
+  initiated: Timestamp
+  closed: Timestamp
+  executed: Timestamp
 }

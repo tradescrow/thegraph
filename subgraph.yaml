@@ -1,4 +1,4 @@
-specVersion: 0.0.1
+specVersion: 0.0.6
 schema:
   file: ./schema.graphql
 dataSources:
@@ -8,9 +8,10 @@ dataSources:
     source:
       address: "0x32868Ed986595e9Cb8727cb2dFB923A612a88E2E"
       abi: Tradescrow
+      startBlock:
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.2
+      apiVersion: 0.0.6
       language: wasm/assemblyscript
       entities:
         - AppFeeChanged
@@ -38,9 +39,9 @@ dataSources:
           handler: handleSwapClosed
         - event: SwapExecuted(indexed address,indexed address,indexed uint256)
           handler: handleSwapExecuted
-        - event: SwapInitiated(indexed address,indexed address,indexed uint256,(address,uint256,(address,uint256,uint256)[],(address,uint256)[]))
+        - event: SwapInitiated(indexed address,indexed address,indexed uint256)
           handler: handleSwapInitiated
-        - event: SwapProposed(indexed address,indexed address,indexed uint256,(address,uint256,(address,uint256,uint256)[],(address,uint256)[]))
+        - event: SwapProposed(indexed address,indexed address,indexed uint256)
           handler: handleSwapProposed
         - event: Unpaused(address)
           handler: handleUnpaused
