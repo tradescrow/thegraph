@@ -1,5 +1,4 @@
 import {
-  Tradescrow,
   AppFeeChanged,
   OwnershipTransferred,
   Paused,
@@ -7,17 +6,16 @@ import {
   SwapClosed,
   SwapExecuted,
   SwapInitiated,
-  SwapProposed,
+  Tradescrow,
   Unpaused
-} from "../generated/Tradescrow/Tradescrow"
-import { Coin, Nft, Offer, Swap, App } from "../generated/schema"
+} from "../generated/Tradescrow/Tradescrow";
+import { App, Coin, Nft, Offer, Swap } from "../generated/schema";
+import { BigInt } from "@graphprotocol/graph-ts";
 
 export function handleAppFeeChanged(event: AppFeeChanged): void {
-  let entity = new App(event.address.toHex())
-  entity.fee = event.params.fee
-  entity.owner = event.transaction.from.toHex()
-  entity.paused = false
-  entity.save()
+  let app = new App(event.address.toHex())
+  app.fee = event.params.fee
+  app.save()
 }
 
 export function handleOwnershipTransferred(event: OwnershipTransferred): void {
@@ -27,93 +25,101 @@ export function handleOwnershipTransferred(event: OwnershipTransferred): void {
 }
 
 export function handlePaused(event: Paused): void {
-  let entity = new App(event.address.toHex())
-  entity.paused = true
-  entity.save()
+  let app = new App(event.address.toHex())
+  app.paused = event.block.timestamp
+  app.save()
 }
 
 export function handleSwapCancelled(event: SwapCancelled): void {
-  let entity = new Swap(event.params.swapId.toString())
-  entity.open = false
-  entity.cancelling = true
-  entity.save()
+  let offer = new Offer(`${event.params.swapId.toString()}-${event.params.from.toHex()}`)
+  offer.cancelled = event.block.timestamp
+  offer.save()
 }
 
 export function handleSwapClosed(event: SwapClosed): void {
-  let entity = new Swap(event.params.swapId.toString())
-  entity.open = false
-  entity.cancelling = false
-  entity.save()
+  let swap = new Swap(event.params.swapId.toString())
+  swap.closed = event.block.timestamp
+  swap.save()
 }
 
 export function handleSwapExecuted(event: SwapExecuted): void {
-  let entity = new Swap(event.params.swapId.toString())
-  entity.executed = true
-  entity.save()
+  let swap = new Swap(event.params.swapId.toString())
+  swap.executed = event.block.timestamp
+  swap.save()
 }
 
 export function handleSwapInitiated(event: SwapInitiated): void {
   let app = App.load(event.address.toHex())
-  let entity = new Swap(event.params.swapId.toString())
-  let target = new Offer(`${entity.id}-${event.params.to.toHex()}`)
+  if (app == null) {
+    app = new App(event.address.toHex())
+  }
+  let swap = new Swap(event.params.swapId.toString())
+  let target = new Offer(`${swap.id}-${event.params.to.toHex()}`)
+  let contract = Tradescrow.bind(event.address)
+  let offer = contract.getOfferBySwapId(event.params.swapId, BigInt.fromString("1"))
+
   target.fee = app.fee
   target.address = event.params.to.toHex()
-  target.native = event.params.offer.native
-  target.coins = event.params.offer.coins.map(coin => {
-    let c = new Coin(`${target.id}-${coin.addr.toHex()}`)
-    c.address = coin.addr.toHex()
-    c.amount = coin.amount
-    c.save()
-    return c
-  })
-  target.nfts = event.params.offer.nfts.map(nft => {
-    let n = new Nft(`${target.id}=${nft.addr.toHex()}=${nft.id.toString()}`)
-    n.address = nft.addr.toHex()
-    n.amount = nft.amount
-    n._id = nft.id
-    n.save()
-    return n
-  })
-  target.save()
-  entity.target = target
-  entity.save()
-}
+  target.native = offer.value1
 
-export function handleSwapProposed(event: SwapProposed): void {
-  let app = App.load(event.address.toHex())
-  let entity = new Swap(event.params.swapId.toString())
-    entity.open = true
-  entity.executed = false
-  let initiator = new Offer(`${entity.id}-${event.params.from.toHex()}`)
-  initiator.fee = app.fee
-  initiator.address = event.params.offer.addr.toHex()
-  initiator.native = event.params.offer.native
-  initiator.coins = event.params.offer.coins.map(coin => {
-    let c = new Coin(`${initiator.id}-${coin.addr.toHex()}`)
-    c.address = coin.addr.toHex()
-    c.amount = coin.amount
+  for (let i=0;i<offer.value2.length;i++) {
+    let c = new Coin(`${target.id}-${offer.value2[i].toHex()}`)
+    c.address = offer.value2[i].toHex()
+    c.amount = offer.value3[i]
     c.save()
-    return c
-  })
-  initiator.nfts = event.params.offer.nfts.map(nft => {
-    let n = new Nft(`${initiator.id}=${nft.addr.toHex()}=${nft.id.toString()}`)
-    n.address = nft.addr.toHex()
-    n.amount = nft.amount
-    n._id = nft.id
+    target.coins[i] = c.id
+  }
+  for (let i=0;i<offer.value4.length;i++) {
+    let n = new Nft(`${target.id}-${offer.value4[i].toHex()}-${offer.value6[i].toString()}`)
+    n.address = offer.value4[i].toHex()
+    n.amount = offer.value5[i]
+    n._id = offer.value6[i]
     n.save()
-    return n
-  })
-  initiator.save()
-  entity.initiator = initiator
-  let target = new Offer(`${entity.id}-${event.params.to.toHex()}`)
-  target.address = event.params.to.toHex()
+    target.nfts[i] = n.id
+  }
+
   target.save()
-  entity.target = target
-  entity.save()
+  swap.target = target.id
+  swap.initiated = event.block.timestamp
+  swap.save()
 }
+//
+//export function handleSwapProposed(event: SwapProposed): void {
+//  let app = App.load(event.address.toHex())
+//  let swap = new Swap(event.params.swapId.toString())
+//  let initiator = new Offer(`${swap.id}-${event.params.from.toHex()}`)
+//  let contract = Tradescrow.bind(event.address)
+//  let offer = contract.getOfferBySwapId(event.params.swapId, BigInt.fromString("0"))
+//  initiator.fee = app.fee
+//  initiator.address = event.params.from.toHex()
+//  initiator.native = offer.value1
+//  initiator.coins = offer.value2.map((address, i) => {
+//    let c = new Coin(`${initiator.id}-${address.toHex()}`)
+//    c.address = address.toHex()
+//    c.amount = offer.value3[i]
+//    c.save()
+//    return c.id
+//  })
+//  initiator.nfts = offer.value4.map((address, i) => {
+//    let n = new Nft(`${initiator.id}=${address.toHex()}=${offer.value6[i].toString()}`)
+//    n.address = address.toHex()
+//    n.amount = offer.value5[i]
+//    n._id = offer.value6[i]
+//    n.save()
+//    return n.id
+//  })
+//  initiator.save()
+//  swap.initiator = initiator.id
+//  let target = new Offer(`${swap.id}-${event.params.to.toHex()}`)
+//  target.address = event.params.to.toHex()
+//  target.save()
+//  swap.target = target.id
+//  swap.proposed = event.block.timestamp
+//  swap.save()
+//}
 
 export function handleUnpaused(event: Unpaused): void {
-  let entity = new App(event.address.toHex())
-  entity.paused = false
-  entity.save()
+  let app = new App(event.address.toHex())
+  app.paused = null
+  app.save()
 }

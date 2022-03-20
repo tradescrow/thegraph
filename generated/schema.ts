@@ -16,9 +16,7 @@ export class App extends Entity {
     super();
     this.set("id", Value.fromString(id));
 
-    this.set("fee", Value.fromBigInt(BigInt.zero()));
     this.set("owner", Value.fromString(""));
-    this.set("paused", Value.fromBoolean(false));
   }
 
   save(): void {
@@ -46,13 +44,21 @@ export class App extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get fee(): BigInt {
+  get fee(): BigInt | null {
     let value = this.get("fee");
-    return value!.toBigInt();
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
   }
 
-  set fee(value: BigInt) {
-    this.set("fee", Value.fromBigInt(value));
+  set fee(value: BigInt | null) {
+    if (!value) {
+      this.unset("fee");
+    } else {
+      this.set("fee", Value.fromBigInt(<BigInt>value));
+    }
   }
 
   get owner(): string {
@@ -64,13 +70,21 @@ export class App extends Entity {
     this.set("owner", Value.fromString(value));
   }
 
-  get paused(): boolean {
+  get paused(): BigInt | null {
     let value = this.get("paused");
-    return value!.toBoolean();
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
   }
 
-  set paused(value: boolean) {
-    this.set("paused", Value.fromBoolean(value));
+  set paused(value: BigInt | null) {
+    if (!value) {
+      this.unset("paused");
+    } else {
+      this.set("paused", Value.fromBigInt(<BigInt>value));
+    }
   }
 }
 
@@ -203,6 +217,8 @@ export class Offer extends Entity {
     this.set("id", Value.fromString(id));
 
     this.set("address", Value.fromString(""));
+    this.set("nfts", Value.fromStringArray(new Array(0)));
+    this.set("coins", Value.fromStringArray(new Array(0)));
   }
 
   save(): void {
@@ -256,38 +272,22 @@ export class Offer extends Entity {
     }
   }
 
-  get nfts(): Array<string> | null {
+  get nfts(): Array<string> {
     let value = this.get("nfts");
-    if (!value || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toStringArray();
-    }
+    return value!.toStringArray();
   }
 
-  set nfts(value: Array<string> | null) {
-    if (!value) {
-      this.unset("nfts");
-    } else {
-      this.set("nfts", Value.fromStringArray(<Array<string>>value));
-    }
+  set nfts(value: Array<string>) {
+    this.set("nfts", Value.fromStringArray(value));
   }
 
-  get coins(): Array<string> | null {
+  get coins(): Array<string> {
     let value = this.get("coins");
-    if (!value || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toStringArray();
-    }
+    return value!.toStringArray();
   }
 
-  set coins(value: Array<string> | null) {
-    if (!value) {
-      this.unset("coins");
-    } else {
-      this.set("coins", Value.fromStringArray(<Array<string>>value));
-    }
+  set coins(value: Array<string>) {
+    this.set("coins", Value.fromStringArray(value));
   }
 
   get fee(): BigInt | null {
@@ -306,6 +306,23 @@ export class Offer extends Entity {
       this.set("fee", Value.fromBigInt(<BigInt>value));
     }
   }
+
+  get cancelled(): BigInt | null {
+    let value = this.get("cancelled");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set cancelled(value: BigInt | null) {
+    if (!value) {
+      this.unset("cancelled");
+    } else {
+      this.set("cancelled", Value.fromBigInt(<BigInt>value));
+    }
+  }
 }
 
 export class Swap extends Entity {
@@ -315,9 +332,6 @@ export class Swap extends Entity {
 
     this.set("initiator", Value.fromString(""));
     this.set("target", Value.fromString(""));
-    this.set("open", Value.fromBoolean(false));
-    this.set("cancelling", Value.fromBoolean(false));
-    this.set("executed", Value.fromBoolean(false));
   }
 
   save(): void {
@@ -363,30 +377,71 @@ export class Swap extends Entity {
     this.set("target", Value.fromString(value));
   }
 
-  get open(): boolean {
-    let value = this.get("open");
-    return value!.toBoolean();
+  get proposed(): BigInt | null {
+    let value = this.get("proposed");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
   }
 
-  set open(value: boolean) {
-    this.set("open", Value.fromBoolean(value));
+  set proposed(value: BigInt | null) {
+    if (!value) {
+      this.unset("proposed");
+    } else {
+      this.set("proposed", Value.fromBigInt(<BigInt>value));
+    }
   }
 
-  get cancelling(): boolean {
-    let value = this.get("cancelling");
-    return value!.toBoolean();
+  get initiated(): BigInt | null {
+    let value = this.get("initiated");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
   }
 
-  set cancelling(value: boolean) {
-    this.set("cancelling", Value.fromBoolean(value));
+  set initiated(value: BigInt | null) {
+    if (!value) {
+      this.unset("initiated");
+    } else {
+      this.set("initiated", Value.fromBigInt(<BigInt>value));
+    }
   }
 
-  get executed(): boolean {
+  get closed(): BigInt | null {
+    let value = this.get("closed");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set closed(value: BigInt | null) {
+    if (!value) {
+      this.unset("closed");
+    } else {
+      this.set("closed", Value.fromBigInt(<BigInt>value));
+    }
+  }
+
+  get executed(): BigInt | null {
     let value = this.get("executed");
-    return value!.toBoolean();
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
   }
 
-  set executed(value: boolean) {
-    this.set("executed", Value.fromBoolean(value));
+  set executed(value: BigInt | null) {
+    if (!value) {
+      this.unset("executed");
+    } else {
+      this.set("executed", Value.fromBigInt(<BigInt>value));
+    }
   }
 }
