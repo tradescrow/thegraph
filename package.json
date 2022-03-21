@@ -4,15 +4,22 @@
   "scripts": {
     "codegen": "graph codegen",
     "build": "graph build",
-    "deploy": "graph deploy --node https://api.studio.thegraph.com/deploy/ tradescrow/thegraph",
-    "create-local": "graph create --node http://localhost:8020/ tradescrow/thegraph",
-    "remove-local": "graph remove --node http://localhost:8020/ tradescrow/thegraph",
-    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 tradescrow/thegraph",
-    "create-harmony": "graph create --node https://graph.t.hmny.io:8020 tradescrow/thegraph",
-    "deploy-harmony": "graph deploy --node https://graph.t.hmny.io:8020 --ipfs http://graph.t.hmny.io:5001 tradescrow/thegraph"
+    "deploy:polygon": "bash scripts/deploy.sh matic 26125965",
+    "deploy:polygonMumbai": "bash scripts/deploy.sh mumbai 25584688",
+    "deploy:fantom": "bash scripts/deploy.sh fantom 33875422",
+    "deploy:fantomTestnet": "bash scripts/deploy.sh fantom-testnet 8519850",
+    "deploy:avalanche": "bash scripts/deploy.sh avalanche 12323134",
+    "deploy:avalancheFuji": "bash scripts/deploy.sh fuji 7520444",
+    "deploy:bsc": "bash scripts/deploy.sh bsc 16207236",
+    "deploy:bscTestnet": "bash scripts/deploy.sh chapel 17709255",
+    "deploy:harmony": "bash scripts/deploy.sh harmony 24271134",
+    "deploy:harmonyTestnet": "gbash scripts/deploy.sh harmony-testnet 22893877",
+    "create:local": "graph create --node http://localhost:8020/ tradescrow/local",
+    "remove:local": "graph remove --node http://localhost:8020/ tradescrow/local",
+    "deploy:local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 tradescrow/local"
   },
   "dependencies": {
-    "@graphprotocol/graph-cli": "0.28.0",
+    "@graphprotocol/graph-cli": "0.28.1",
     "@graphprotocol/graph-ts": "0.26.0",
     "graphql-scalars": "^1.15.0"
   }

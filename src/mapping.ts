@@ -74,7 +74,7 @@ export function handleSwapInitiated(event: SwapInitiated): void {
     let n = new Nft(`${target.id}-${offer.value4[i].toHex()}-${offer.value6[i].toString()}`)
     n.address = offer.value4[i].toHex()
     n.amount = offer.value5[i]
-    n._id = offer.value6[i]
+    n.nftId = offer.value6[i]
     n.save()
     target.nfts[i] = n.id
   }
@@ -110,7 +110,7 @@ export function handleSwapProposed(event: SwapProposed): void {
     let n = new Nft(`${initiator.id}-${offer.value4[i].toHex()}-${offer.value6[i].toString()}`)
     n.address = offer.value4[i].toHex()
     n.amount = offer.value5[i]
-    n._id = offer.value6[i]
+    n.nftId = offer.value6[i]
     n.save()
     initiator.nfts[i] = n.id
   }

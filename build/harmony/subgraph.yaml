@@ -1,4 +1,4 @@
-specVersion: 0.0.6
+specVersion: 0.0.4
 schema:
   file: schema.graphql
 dataSources:
@@ -8,7 +8,7 @@ dataSources:
     source:
       address: "0x83FB618e5288dF061d687c78D821674D1100e18B"
       abi: Tradescrow
-      startBlock: 24276160
+      startBlock: 24271134
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -25,7 +25,7 @@ dataSources:
         - Unpaused
       abis:
         - name: Tradescrow
-          file: Tradescrow\abis\Tradescrow.json
+          file: Tradescrow/abis/Tradescrow.json
       eventHandlers:
         - event: AppFeeChanged(uint256)
           handler: handleAppFeeChanged
@@ -45,4 +45,4 @@ dataSources:
           handler: handleSwapProposed
         - event: Unpaused(address)
           handler: handleUnpaused
-      file: Tradescrow\Tradescrow.wasm
+      file: Tradescrow/Tradescrow.wasm

@@ -13,7 +13,7 @@ type Coin @entity {
 
 type Nft @entity {
   id: ID!
-  _id: BigInt!
+  nftId: BigInt!
   address: String!
   amount: BigInt
 }
