@@ -6,6 +6,7 @@ import {
   SwapClosed,
   SwapExecuted,
   SwapInitiated,
+  SwapProposed,
   Tradescrow,
   Unpaused
 } from "../generated/Tradescrow/Tradescrow";
@@ -83,40 +84,42 @@ export function handleSwapInitiated(event: SwapInitiated): void {
   swap.initiated = event.block.timestamp
   swap.save()
 }
-//
-//export function handleSwapProposed(event: SwapProposed): void {
-//  let app = App.load(event.address.toHex())
-//  let swap = new Swap(event.params.swapId.toString())
-//  let initiator = new Offer(`${swap.id}-${event.params.from.toHex()}`)
-//  let contract = Tradescrow.bind(event.address)
-//  let offer = contract.getOfferBySwapId(event.params.swapId, BigInt.fromString("0"))
-//  initiator.fee = app.fee
-//  initiator.address = event.params.from.toHex()
-//  initiator.native = offer.value1
-//  initiator.coins = offer.value2.map((address, i) => {
-//    let c = new Coin(`${initiator.id}-${address.toHex()}`)
-//    c.address = address.toHex()
-//    c.amount = offer.value3[i]
-//    c.save()
-//    return c.id
-//  })
-//  initiator.nfts = offer.value4.map((address, i) => {
-//    let n = new Nft(`${initiator.id}=${address.toHex()}=${offer.value6[i].toString()}`)
-//    n.address = address.toHex()
-//    n.amount = offer.value5[i]
-//    n._id = offer.value6[i]
-//    n.save()
-//    return n.id
-//  })
-//  initiator.save()
-//  swap.initiator = initiator.id
-//  let target = new Offer(`${swap.id}-${event.params.to.toHex()}`)
-//  target.address = event.params.to.toHex()
-//  target.save()
-//  swap.target = target.id
-//  swap.proposed = event.block.timestamp
-//  swap.save()
-//}
+
+export function handleSwapProposed(event: SwapProposed): void {
+  let app = App.load(event.address.toHex())
+  if (app == null) {
+    app = new App(event.address.toHex())
+  }
+  let swap = new Swap(event.params.swapId.toString())
+  let initiator = new Offer(`${swap.id}-${event.params.from.toHex()}`)
+  let contract = Tradescrow.bind(event.address)
+  let offer = contract.getOfferBySwapId(event.params.swapId, BigInt.fromString("0"))
+
+  initiator.fee = app.fee
+  initiator.address = event.params.from.toHex()
+  initiator.native = offer.value1
+
+  for (let i=0;i<offer.value2.length;i++) {
+    let c = new Coin(`${initiator.id}-${offer.value2[i].toHex()}`)
+    c.address = offer.value2[i].toHex()
+    c.amount = offer.value3[i]
+    c.save()
+    initiator.coins[i] = c.id
+  }
+  for (let i=0;i<offer.value4.length;i++) {
+    let n = new Nft(`${initiator.id}-${offer.value4[i].toHex()}-${offer.value6[i].toString()}`)
+    n.address = offer.value4[i].toHex()
+    n.amount = offer.value5[i]
+    n._id = offer.value6[i]
+    n.save()
+    initiator.nfts[i] = n.id
+  }
+
+  initiator.save()
+  swap.initiator = initiator.id
+  swap.proposed = event.block.timestamp
+  swap.save()
+}
 
 export function handleUnpaused(event: Unpaused): void {
   let app = new App(event.address.toHex())

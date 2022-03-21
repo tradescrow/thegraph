@@ -7,7 +7,9 @@
     "deploy": "graph deploy --node https://api.studio.thegraph.com/deploy/ tradescrow/thegraph",
     "create-local": "graph create --node http://localhost:8020/ tradescrow/thegraph",
     "remove-local": "graph remove --node http://localhost:8020/ tradescrow/thegraph",
-    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 tradescrow/thegraph"
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 tradescrow/thegraph",
+    "create-harmony": "graph create --node https://graph.t.hmny.io:8020 tradescrow/thegraph",
+    "deploy-harmony": "graph deploy --node https://graph.t.hmny.io:8020 --ipfs http://graph.t.hmny.io:5001 tradescrow/thegraph"
   },
   "dependencies": {
     "@graphprotocol/graph-cli": "0.28.0",
