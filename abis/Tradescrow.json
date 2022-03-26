@@ -216,9 +216,9 @@
         "type": "uint256"
       },
       {
-        "internalType": "uint256",
+        "internalType": "address",
         "name": "participant",
-        "type": "uint256"
+        "type": "address"
       }
     ],
     "name": "getOfferBySwapId",

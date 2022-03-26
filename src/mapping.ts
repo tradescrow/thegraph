@@ -57,7 +57,7 @@ export function handleSwapInitiated(event: SwapInitiated): void {
   let swap = new Swap(event.params.swapId.toString())
   let target = new Offer(`${swap.id}-${event.params.to.toHex()}`)
   let contract = Tradescrow.bind(event.address)
-  let offer = contract.getOfferBySwapId(event.params.swapId, BigInt.fromString("1"))
+  let offer = contract.getOfferBySwapId(event.params.swapId, event.params.from)
 
   target.fee = app.fee
   target.address = event.params.to.toHex()
@@ -93,7 +93,7 @@ export function handleSwapProposed(event: SwapProposed): void {
   let swap = new Swap(event.params.swapId.toString())
   let initiator = new Offer(`${swap.id}-${event.params.from.toHex()}`)
   let contract = Tradescrow.bind(event.address)
-  let offer = contract.getOfferBySwapId(event.params.swapId, BigInt.fromString("0"))
+  let offer = contract.getOfferBySwapId(event.params.swapId, event.params.from)
 
   initiator.fee = app.fee
   initiator.address = event.params.from.toHex()

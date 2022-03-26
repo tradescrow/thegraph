@@ -12,7 +12,7 @@
     "deploy:avalancheFuji": "bash scripts/deploy.sh fuji 7520444",
     "deploy:bsc": "bash scripts/deploy.sh bsc 16207236",
     "deploy:bscTestnet": "bash scripts/deploy.sh chapel 17709255",
-    "deploy:harmony": "bash scripts/deploy.sh harmony 24271134",
+    "deploy:harmony": "bash scripts/deploy.sh harmony 24457000",
     "deploy:harmonyTestnet": "gbash scripts/deploy.sh harmony-testnet 22893877",
     "create:local": "graph create --node http://localhost:8020/ tradescrow/local",
     "remove:local": "graph remove --node http://localhost:8020/ tradescrow/local",

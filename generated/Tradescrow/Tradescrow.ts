@@ -266,14 +266,14 @@ export class Tradescrow extends ethereum.SmartContract {
 
   getOfferBySwapId(
     swapId: BigInt,
-    participant: BigInt
+    participant: Address
   ): Tradescrow__getOfferBySwapIdResult {
     let result = super.call(
       "getOfferBySwapId",
-      "getOfferBySwapId(uint256,uint256):(address,uint256,address[],uint256[],address[],uint256[],uint256[])",
+      "getOfferBySwapId(uint256,address):(address,uint256,address[],uint256[],address[],uint256[],uint256[])",
       [
         ethereum.Value.fromUnsignedBigInt(swapId),
-        ethereum.Value.fromUnsignedBigInt(participant)
+        ethereum.Value.fromAddress(participant)
       ]
     );
 
@@ -290,14 +290,14 @@ export class Tradescrow extends ethereum.SmartContract {
 
   try_getOfferBySwapId(
     swapId: BigInt,
-    participant: BigInt
+    participant: Address
   ): ethereum.CallResult<Tradescrow__getOfferBySwapIdResult> {
     let result = super.tryCall(
       "getOfferBySwapId",
-      "getOfferBySwapId(uint256,uint256):(address,uint256,address[],uint256[],address[],uint256[],uint256[])",
+      "getOfferBySwapId(uint256,address):(address,uint256,address[],uint256[],address[],uint256[],uint256[])",
       [
         ethereum.Value.fromUnsignedBigInt(swapId),
-        ethereum.Value.fromUnsignedBigInt(participant)
+        ethereum.Value.fromAddress(participant)
       ]
     );
     if (result.reverted) {
