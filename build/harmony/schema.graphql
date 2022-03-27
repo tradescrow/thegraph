@@ -30,8 +30,8 @@ type Offer @entity {
 
 type Swap @entity {
   id: ID!
-  initiator: Offer!
-  target: Offer!
+  initiator: Offer
+  target: Offer
   proposed: BigInt
   initiated: BigInt
   closed: BigInt
