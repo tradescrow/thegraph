@@ -1,0 +1,74 @@
+specVersion: 0.0.5
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: Tradescrow
+    network: avalanche
+    source:
+      address: "0x0423cC396ef9FB21B9De812859E9d4c6742ECE26"
+      abi: Tradescrow
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - AdminChanged
+        - BeaconUpgraded
+        - FeePaid
+        - FeeRefunded
+        - FeeReleased
+        - FeeUpdated
+        - Initialized
+        - Paused
+        - RoleAdminChanged
+        - RoleGranted
+        - RoleRevoked
+        - TradeAccepted
+        - TradeCanceled
+        - TradeCreated
+        - TradeRejected
+        - TreasuryUpdated
+        - Unpaused
+        - Upgraded
+      abis:
+        - name: Tradescrow
+          file: ./abis/Tradescrow.json
+      eventHandlers:
+        - event: AdminChanged(address,address)
+          handler: handleAdminChanged
+        - event: BeaconUpgraded(indexed address)
+          handler: handleBeaconUpgraded
+        - event: FeePaid(indexed address,uint256)
+          handler: handleFeePaid
+        - event: FeeRefunded(indexed address,uint256)
+          handler: handleFeeRefunded
+        - event: FeeReleased(uint256)
+          handler: handleFeeReleased
+        - event: FeeUpdated(indexed address,address,uint256)
+          handler: handleFeeUpdated
+        - event: Initialized(uint8)
+          handler: handleInitialized
+        - event: Paused(address)
+          handler: handlePaused
+        - event: RoleAdminChanged(indexed bytes32,indexed bytes32,indexed bytes32)
+          handler: handleRoleAdminChanged
+        - event: RoleGranted(indexed bytes32,indexed address,indexed address)
+          handler: handleRoleGranted
+        - event: RoleRevoked(indexed bytes32,indexed address,indexed address)
+          handler: handleRoleRevoked
+        - event: TradeAccepted(indexed address,indexed uint256)
+          handler: handleTradeAccepted
+        - event: TradeCanceled(indexed address,indexed uint256)
+          handler: handleTradeCanceled
+        - event: TradeCreated(indexed address,indexed uint256,indexed address,(address,uint256,uint256,uint8)[],(address,uint256,uint256,uint8)[])
+          handler: handleTradeCreated
+        - event: TradeRejected(indexed address,indexed uint256)
+          handler: handleTradeRejected
+        - event: TreasuryUpdated(indexed address,address)
+          handler: handleTreasuryUpdated
+        - event: Unpaused(address)
+          handler: handleUnpaused
+        - event: Upgraded(indexed address)
+          handler: handleUpgraded
+      file: ./src/tradescrow.ts
