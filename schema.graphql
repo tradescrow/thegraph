@@ -1,6 +1,61 @@
-type ExampleEntity @entity {
+
+type Config @entity {
+  id: String!
+  feeToken: Bytes!
+  feeAmount: BigInt!
+  feesReleased: BigInt!
+  feesPaid: BigInt!
+  feesRefunded: BigInt!
+  feesInEscrow: BigInt!
+  paused: Boolean!
+  treasury: Bytes!
+  accepted: BigInt!
+  rejected: BigInt!
+  canceled: BigInt!
+  created: BigInt!
+}
+
+type User @entity {
   id: Bytes!
-  count: BigInt!
-  previousAdmin: Bytes! # address
-  newAdmin: Bytes! # address
+  feesReleased: BigInt!
+  feesPaid: BigInt!
+  feesRefunded: BigInt!
+  feesInEscrow: BigInt!
+  received: BigInt!
+  accepted: BigInt!
+  rejected: BigInt!
+  canceled: BigInt!
+  created: BigInt!
+  completed: BigInt!
+}
+enum Status {
+  Open
+  Accepted
+  Rejected
+  Canceled
+}
+
+enum AssetType {
+  ERC20
+  ERC1155
+  ERC721
+}
+
+type Asset @entity(immutable: true) {
+  id: Bytes!
+  address: Bytes!
+  user: User!
+  kind: AssetType!
+  tokenId: BigInt
+  amount: BigInt
+}
+
+type Trade @entity {
+  id: Bytes!
+  fee: BigInt!
+  status: Status!
+  party: User!
+  counterparty: User!
+  offered: [Asset!]!
+  desired: [Asset!]!
 }
