@@ -1,6 +1,6 @@
 // noinspection JSUnusedGlobalSymbols,JSUnusedLocalSymbols
 
-import { Address, BigInt } from "@graphprotocol/graph-ts";
+import { Address, BigInt, log } from "@graphprotocol/graph-ts";
 import {
   // Tradescrow,
   AdminChanged,
@@ -23,7 +23,7 @@ import {
   Upgraded
 } from "../generated/Tradescrow/Tradescrow"
 import { createOrLoadAsset, createOrLoadConfig, createOrLoadTrade, createOrLoadUser } from "./helpers";
-import { AssetTypeMap, ONE } from "./constants";
+import { ONE } from "./constants";
 
 export function handleAdminChanged(event: AdminChanged): void {
   // Entities can be loaded from the store using a string ID; this ID
@@ -185,25 +185,30 @@ export function handleTradeCreated(event: TradeCreated): void {
   let trade = createOrLoadTrade(event.params.tradeId)
   trade.party = party.id
   trade.counterparty = counterparty.id
+  trade.save()
+
   let tradeId = event.params.tradeId
   for (let i = 0, k = event.params.partyAssets.length; i < k; ++i) {
     let value = event.params.partyAssets[i];
     let asset = createOrLoadAsset(tradeId, value._address, party)
-    asset.kind = AssetTypeMap.get(value.assetType)
+    log.warning("Asset Type = {}", [value.assetType.toString()])
+    asset.kind = value.assetType == 0 ? 'ERC20' : value.assetType == 1 ? 'ERC1155' : 'ERC721'
+    asset.tradeOffered = trade.id
     if (asset.kind == 'ERC20' || asset.kind == 'ERC1155') {
       asset.amount = value.amount
     }
     if (asset.kind == 'ERC1155' || asset.kind == 'ERC721') {
       asset.tokenId = value.id
     }
+    asset.tradeOffered = trade.id
     asset.save()
-    trade.offered.push(asset.id)
   }
 
   for (let i = 0, k = event.params.counterpartyAssets.length; i < k; ++i) {
     let value = event.params.counterpartyAssets[i];
     let asset = createOrLoadAsset(tradeId, value._address, counterparty)
-    asset.kind = AssetTypeMap.get(value.assetType)
+    asset.kind = value.assetType == 0 ? 'ERC20' : value.assetType == 1 ? 'ERC1155' : 'ERC721'
+    asset.tradeDesired = trade.id
     if (asset.kind == 'ERC20' || asset.kind == 'ERC1155') {
       asset.amount = value.amount
     }
@@ -211,10 +216,9 @@ export function handleTradeCreated(event: TradeCreated): void {
       asset.tokenId = value.id
     }
     asset.save()
-    trade.desired.push(asset.id)
   }
 
-  trade.save()
+
 }
 
 export function handleTradeRejected(event: TradeRejected): void {

@@ -27,7 +27,10 @@ type User @entity {
   canceled: BigInt!
   created: BigInt!
   completed: BigInt!
+  partyTrades: [Trade!]! @derivedFrom(field: "party")
+  counterpartyTrades: [Trade!]! @derivedFrom(field: "counterparty")
 }
+
 enum Status {
   Open
   Accepted
@@ -43,6 +46,8 @@ enum AssetType {
 
 type Asset @entity(immutable: true) {
   id: Bytes!
+  tradeOffered: Trade
+  tradeDesired: Trade
   address: Bytes!
   user: User!
   kind: AssetType!
@@ -56,6 +61,6 @@ type Trade @entity {
   status: Status!
   party: User!
   counterparty: User!
-  offered: [Asset!]!
-  desired: [Asset!]!
+  offered: [Asset!]! @derivedFrom(field: "tradeOffered")
+  desired: [Asset!]! @derivedFrom(field: "tradeDesired")
 }

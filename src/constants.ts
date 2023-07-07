@@ -1,11 +1,17 @@
-import { BigInt } from "@graphprotocol/graph-ts";
+import { BigInt, TypedMap } from "@graphprotocol/graph-ts";
 
-let AssetTypes = new Map<number, string>()
-AssetTypes.set(0, 'Open')
-AssetTypes.set(1, 'Accepted')
-AssetTypes.set(2, 'Rejected')
-AssetTypes.set(3, 'Canceled')
-
-export const AssetTypeMap = AssetTypes;
 
 export const ONE = BigInt.fromI32(1);
+
+export let TradeStatusMap = new TypedMap<number, string>()
+TradeStatusMap.set(0, 'Open')
+TradeStatusMap.set(1, 'Accepted')
+TradeStatusMap.set(2, 'Rejected')
+TradeStatusMap.set(3, 'Canceled')
+
+
+export let AssetTypeMap = new TypedMap<number, string>()
+AssetTypeMap.set(0, 'ERC20')
+AssetTypeMap.set(1, 'ERC1155')
+AssetTypeMap.set(2, 'ERC721')
+

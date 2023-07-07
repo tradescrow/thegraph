@@ -43,24 +43,23 @@ export function createOrLoadUser(address: Address): User {
   return user
 }
 
-export function createOrLoadTrade(id: BigInt): Trade {
+export function createOrLoadTrade(tradeId: BigInt): Trade {
   let config = createOrLoadConfig()
-  let trade = Trade.load(Bytes.fromHexString(id.toHex()))
+  let id = Bytes.fromByteArray(Bytes.fromBigInt(tradeId))
+  let trade = Trade.load(id)
   if (!trade) {
-    trade = new Trade(Bytes.fromHexString(id.toHex()))
-    trade.status = 'Created'
+    trade = new Trade(id)
+    trade.status = 'Open'
     trade.fee = config.feeAmount
     trade.party = Address.zero()
     trade.counterparty = Address.zero()
-    trade.offered = []
-    trade.desired = []
     trade.save()
   }
   return trade
 }
 
 export function createOrLoadAsset(tradeId: BigInt, address: Address, user: User): Asset {
-  let id = Bytes.fromHexString(address.toHex() + "-" + user.id.toHex() + "-" + tradeId.toHex())
+  let id = Bytes.fromUTF8(address.toHex() + "-" + user.id.toHex() + "-" + tradeId.toHex())
   let asset = Asset.load(id)
   if (!asset) {
     asset = new Asset(id)
