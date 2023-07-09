@@ -62,6 +62,7 @@ type Trade @entity {
   status: Status!
   party: User!
   counterparty: User!
+  chain: String!
   offered: [Asset!]! @derivedFrom(field: "tradeOffered")
   desired: [Asset!]! @derivedFrom(field: "tradeDesired")
 }
