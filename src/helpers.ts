@@ -50,6 +50,7 @@ export function createOrLoadTrade(tradeId: BigInt): Trade {
   if (!trade) {
     trade = new Trade(id)
     trade.status = 'Open'
+    trade.time = 0
     trade.fee = config.feeAmount
     trade.party = Address.zero()
     trade.counterparty = Address.zero()

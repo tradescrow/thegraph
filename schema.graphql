@@ -58,6 +58,7 @@ type Asset @entity(immutable: true) {
 type Trade @entity {
   id: Bytes!
   fee: BigInt!
+  time: Int!
   status: Status!
   party: User!
   counterparty: User!

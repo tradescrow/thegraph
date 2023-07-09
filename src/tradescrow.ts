@@ -184,6 +184,7 @@ export function handleTradeCreated(event: TradeCreated): void {
 
   let trade = createOrLoadTrade(event.params.tradeId)
   trade.party = party.id
+  trade.time = event.block.timestamp.toI32();
   trade.counterparty = counterparty.id
   trade.save()
 
