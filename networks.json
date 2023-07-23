@@ -1,7 +1,20 @@
 {
+  "mainnet": {
+    "Tradescrow": {
+      "address": "0x4094f921297d986a49dbAD93995D935BE23F1920",
+      "startBlock": 17754318
+    }
+  },
   "avalanche": {
     "Tradescrow": {
-      "address": "0x0423cC396ef9FB21B9De812859E9d4c6742ECE26"
+      "address": "0x0423cC396ef9FB21B9De812859E9d4c6742ECE26",
+      "startBlock": 31998524
+    }
+  },
+  "arbitrum-one": {
+    "Tradescrow": {
+      "address": "0x0423cC396ef9FB21B9De812859E9d4c6742ECE26",
+      "startBlock": 106462778
     }
   }
 }
