@@ -6,7 +6,7 @@
     "build": "graph build",
     "deploy:avalanche": "graph deploy --node https://api.studio.thegraph.com/deploy/ --network=avalanche --version-label=v1.0.2 tradescrow-avalanche",
     "deploy:arbitrum": "graph deploy --node https://api.studio.thegraph.com/deploy/ --network=arbitrum-one --version-label=v1.0.2 tradescrow-arbitrum",
-    "deploy:mainnet": "graph deploy --node https://api.studio.thegraph.com/deploy/ --network=mainnet --version-label=v1.0.2 tradescrow-mainnet",
+    "deploy:mainnet": "graph deploy --node https://api.studio.thegraph.com/deploy/ --network=mainnet --version-label=v1.0.3 tradescrow-mainnet",
     "create-local": "graph create --node http://localhost:8020/ tradescrow",
     "remove-local": "graph remove --node http://localhost:8020/ tradescrow",
     "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 tradescrow",
