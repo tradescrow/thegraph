@@ -16,5 +16,11 @@
       "address": "0x0423cC396ef9FB21B9De812859E9d4c6742ECE26",
       "startBlock": 106462778
     }
+  },
+  "base": {
+    "Tradescrow": {
+      "address": "0x0423cC396ef9FB21B9De812859E9d4c6742ECE26",
+      "startBlock": 2284366
+    }
   }
 }
