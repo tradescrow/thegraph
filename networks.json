@@ -22,5 +22,35 @@
       "address": "0x0423cC396ef9FB21B9De812859E9d4c6742ECE26",
       "startBlock": 2284366
     }
+  },
+  "bsc": {
+    "Tradescrow": {
+      "address": "0x0423cC396ef9FB21B9De812859E9d4c6742ECE26",
+      "startBlock": 30649793
+    }
+  },
+  "boba": {
+    "Tradescrow": {
+      "address": "0x4094f921297d986a49dbAD93995D935BE23F1920",
+      "startBlock": 1043265
+    }
+  },
+  "matic": {
+    "Tradescrow": {
+      "address": "0x0423cC396ef9FB21B9De812859E9d4c6742ECE26",
+      "startBlock": 46023568
+    }
+  },
+  "polygon-zkevm": {
+    "Tradescrow": {
+      "address": "0x0423cC396ef9FB21B9De812859E9d4c6742ECE26",
+      "startBlock": 460600
+    }
+  },
+  "optimism": {
+    "Tradescrow": {
+      "address": "0x0423cC396ef9FB21B9De812859E9d4c6742ECE26",
+      "startBlock": 107914514
+    }
   }
 }
