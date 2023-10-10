@@ -16,10 +16,12 @@
     "deploy:studio:polygon-zkevm": "yarn deploy:studio --network polygon-zkevm tradescrow-polygon-zkevm",
     "deploy:hosted:bsc": "yarn deploy:hosted --network bsc tradescrow/tradescrow-bsc",
     "deploy:hosted:boba": "yarn deploy:hosted --network boba tradescrow/tradescrow-boba",
+    "deploy:managed:dfk": "yarn deploy:managed --network dfk tradescrow/tradescrow-dfk",
     "----HELPER----": "",
     "deploy:studio": "graph deploy --node https://api.studio.thegraph.com/deploy/ --version-label=v1.0.3",
     "deploy:hosted": "graph deploy --product hosted-service",
-    "deploy:local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 "
+    "create:managed": "graph create --node http://165.227.15.22:8020 tradescrow/tradescrow-dfk",
+    "deploy:managed": "graph deploy --node http://165.227.15.22:8020 --ipfs http://165.227.15.22:5001 --version-label=v1.0.3"
   },
   "dependencies": {
     "@graphprotocol/graph-cli": "0.51.2",
