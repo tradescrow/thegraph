@@ -60,14 +60,15 @@ export function createOrLoadTrade(tradeId: BigInt): Trade {
   return trade
 }
 
-export function createOrLoadAsset(tradeId: BigInt, address: Address, user: User): Asset {
-  let id = Bytes.fromUTF8(address.toHex() + "-" + user.id.toHex() + "-" + tradeId.toHex())
+export function createOrLoadAsset(tradeId: BigInt, address: Address, tokenId: BigInt, user: User): Asset {
+  let id = Bytes.fromUTF8(address.toHex() + "-" + tokenId.toHex() + "-" + user.id.toHex() + "-" + tradeId.toHex())
   let asset = Asset.load(id)
   if (!asset) {
     asset = new Asset(id)
     asset.address = address
     asset.kind = 'ERC20'
     asset.user = user.id
+    asset.tokenId = tokenId
     asset.save()
   }
   return asset

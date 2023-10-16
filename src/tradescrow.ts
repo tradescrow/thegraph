@@ -191,15 +191,12 @@ export function handleTradeCreated(event: TradeCreated): void {
   let tradeId = event.params.tradeId
   for (let i = 0, k = event.params.partyAssets.length; i < k; ++i) {
     let value = event.params.partyAssets[i];
-    let asset = createOrLoadAsset(tradeId, value._address, party)
+    let asset = createOrLoadAsset(tradeId, value._address, value.id, party)
     log.warning("Asset Type = {}", [value.assetType.toString()])
     asset.kind = value.assetType == 0 ? 'ERC20' : value.assetType == 1 ? 'ERC1155' : 'ERC721'
     asset.tradeOffered = trade.id
     if (asset.kind == 'ERC20' || asset.kind == 'ERC1155') {
       asset.amount = value.amount
-    }
-    if (asset.kind == 'ERC1155' || asset.kind == 'ERC721') {
-      asset.tokenId = value.id
     }
     asset.tradeOffered = trade.id
     asset.save()
@@ -207,14 +204,11 @@ export function handleTradeCreated(event: TradeCreated): void {
 
   for (let i = 0, k = event.params.counterpartyAssets.length; i < k; ++i) {
     let value = event.params.counterpartyAssets[i];
-    let asset = createOrLoadAsset(tradeId, value._address, counterparty)
+    let asset = createOrLoadAsset(tradeId, value._address, value.id, counterparty)
     asset.kind = value.assetType == 0 ? 'ERC20' : value.assetType == 1 ? 'ERC1155' : 'ERC721'
     asset.tradeDesired = trade.id
     if (asset.kind == 'ERC20' || asset.kind == 'ERC1155') {
       asset.amount = value.amount
-    }
-    if (asset.kind == 'ERC1155' || asset.kind == 'ERC721') {
-      asset.tokenId = value.id
     }
     asset.save()
   }
