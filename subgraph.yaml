@@ -4,11 +4,11 @@ schema:
 dataSources:
   - kind: ethereum
     name: Tradescrow
-    network: dfk
+    network: avalanche
     source:
       abi: Tradescrow
-      address: "0x99C294C393d9ABF76a6AB5175e5d8eA300403f56"
-      startBlock: 23198274
+      address: "0x0423cC396ef9FB21B9De812859E9d4c6742ECE26"
+      startBlock: 31998524
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
