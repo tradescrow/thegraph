@@ -58,5 +58,11 @@
       "address": "0x99C294C393d9ABF76a6AB5175e5d8eA300403f56",
       "startBlock": 23198274
     }
+  },
+  "klaytn": {
+    "Tradescrow": {
+      "address": "0x048E52566Ed00cf840C5b3314a9cA1551A411De9",
+      "startBlock": 138591210
+    }
   }
 }
